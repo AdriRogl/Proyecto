@@ -17,9 +17,14 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Desplegar en GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
- 
+          - name: Configurar permisos para GitHub Pages
+          run: |
+            git config --global user.email "github-actions@github.com"
+            git config --global user.name "github-actions"
+  
+        - name: Desplegar en GitHub Pages
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./ 
+            publish_branch: gh-pages
