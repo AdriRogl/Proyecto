@@ -2,29 +2,42 @@ name: Deploy all
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  
     steps:
       - name: Checkout del código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  
 
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-          - name: Configurar permisos para GitHub Pages
-          run: |
-            git config --global user.email "github-actions@github.com"
-            git config --global user.name "github-actions"
-  
-        - name: Desplegar en GitHub Pages
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./ 
-            publish_branch: gh-pages
+      - name: Configurar permisos para GitHub Actions
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+
+      - name: Ejecutar prueba CI (Comando simple)
+        run: echo "Prueba, CI"
+
+      - name: Ejecutar prueba CI (Múltiples comandos)
+        run: |
+          echo "Add other actions to build,"
+          echo "test, and deploy your project."
+
+      - name: Desplegar en GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+
+      - name: Confirmar despliegue exitoso
+        run: echo "El despliegue en GitHub Pages se realizó con éxito."
